@@ -10,7 +10,9 @@ import json
 # include WU key in URL in file weather_underground_query_url.txt
 # http://api.wunderground.com/api/<your key here>/conditions/q/<weather station here>.json
 with open('weather_underground_query_url.txt', 'r') as f:
-    wu_query_url = f.readline()
+    wu_query_url = f.readline()  # .rstrip('\n')
+print('getting local outside weather from:')
+print(wu_query_url)
 
 # 1st floor
 IP1 = '192.168.0.111'
@@ -131,6 +133,8 @@ while True:
 
             time.sleep(300)  # Delay for 5 minutes (300 seconds)
         except Exception as e:
+            print('Exception Occurred')
             print(e)
             print('getting new connection to thermostats')
+            time.sleep(5)
             break
