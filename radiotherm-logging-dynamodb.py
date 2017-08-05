@@ -64,6 +64,7 @@ while True:
             wu_precip_1hr_in = parsed_json['current_observation']['precip_1hr_in']
             wu_precip_today_in = parsed_json['current_observation']['precip_today_in']
             wu_weather = parsed_json['current_observation']['weather']
+            wu_station_id = parsed_json['current_observation']['station_id']
 
             # downstairs thermostat ts1 readings
             ts1_temp = str(tstat_1.temp['raw'])
@@ -101,7 +102,7 @@ while True:
                       'ts2_hold': ts2_hold,
                       'ts2_tstate': ts2_tstate,
                       'ts2_fstate': ts2_fstate,
-                      'wu_station': 'pws:KTXARGYL24',
+                      'wu_station': wu_station_id,
                       'wu_temp_f': wu_temp_f,
                       'wu_relative_humidity': wu_relative_humidity,
                       'wu_wind_degrees': wu_wind_degrees,

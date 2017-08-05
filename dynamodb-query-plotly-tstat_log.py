@@ -24,14 +24,11 @@ class DecimalEncoder(json.JSONEncoder):
                 return int(o)
         return super(DecimalEncoder, self).default(o)
 
-
-dynamodb = boto3.resource('dynamodb')
-
-table = dynamodb.Table('tstat_log')
-
 now = datetime.datetime.now(timezone('UTC'))
 starttimestamp = now - timedelta(hours=hours_of_history)
 
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('tstat_log')
 response = table.query(
     ProjectionExpression="log_timestamp, ts1_tstate, ts2_tstate, ts1_temp, ts2_temp, "
                          "ts1_t_cool, ts2_t_cool, wu_temp_f, wu_relative_humidity",
