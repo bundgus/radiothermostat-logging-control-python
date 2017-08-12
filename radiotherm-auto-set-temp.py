@@ -35,7 +35,8 @@ while True:
 
             target_temp_1 = get_target_temp(1)
             if tstat1.tmode['human'] == 'Cool' and tstat1.t_cool['raw'] < target_temp_1:
-                # print(now, 'hvac 1 set to less than 75 for ' + str(periods_under_target_1) + ' periods')
+                print(now, 'hvac 1 set to less than 75 for ' + str(periods_under_target_1 * seconds_in_period / 60)
+                      + ' minutes')
                 if periods_under_target_1 > max_samples_under_target:
                     print(now, 'setting hvac 1 to target temp ' + str(target_temp_1))
                     tstat1.t_cool = target_temp_1
@@ -48,7 +49,8 @@ while True:
 
             target_temp_2 = get_target_temp(2)
             if tstat2.tmode['human'] == 'Cool' and tstat2.t_cool['raw'] < target_temp_2:
-                # print(now, 'hvac 2 set to less than 75 for ' + str(periods_under_target_2) + ' periods')
+                print(now, 'hvac 2 set to less than 75 for ' + str(periods_under_target_2 * seconds_in_period / 60)
+                      + ' minutes')
                 if periods_under_target_2 > max_samples_under_target:
                     print(now, 'setting hvac 2 to target temp ' + str(target_temp_2))
                     tstat2.t_cool = target_temp_2

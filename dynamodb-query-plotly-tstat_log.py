@@ -10,7 +10,7 @@ import datetime
 from pytz import timezone
 from datetime import timedelta
 
-hours_of_history = 24 * 10
+hours_of_history = 24 * 2
 
 
 # Helper class to convert a DynamoDB item to JSON.
