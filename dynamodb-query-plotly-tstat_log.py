@@ -10,7 +10,7 @@ import datetime
 from pytz import timezone
 from datetime import timedelta
 
-hours_of_history = 24
+hours_of_history = 24 * 2
 
 
 # Helper class to convert a DynamoDB item to JSON.
@@ -24,13 +24,11 @@ class DecimalEncoder(json.JSONEncoder):
                 return int(o)
         return super(DecimalEncoder, self).default(o)
 
-
-dynamodb = boto3.resource('dynamodb')
-
-table = dynamodb.Table('tstat_log')
-
 now = datetime.datetime.now(timezone('UTC'))
 starttimestamp = now - timedelta(hours=hours_of_history)
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('tstat_log')
 
 response = table.query(
     ProjectionExpression="log_timestamp, ts1_tstate, ts2_tstate, ts1_temp, ts2_temp, "
@@ -40,6 +38,27 @@ response = table.query(
 )
 
 df = pd.DataFrame(response['Items'])
+
+# http://boto3.readthedocs.io/en/latest/reference/services/dynamodb.html#DynamoDB.Client.query
+# If LastEvaluatedKey is present in the response, you will need to paginate the result set.
+# For more information, see Paginating the Results in the Amazon DynamoDB Developer Guide .
+hasmorepages = True
+while hasmorepages:
+    if 'LastEvaluatedKey' in response:
+        print('LastEvaluatedKey', response['LastEvaluatedKey'])
+        print('getting next page of results')
+        response = table.query(
+            ProjectionExpression="log_timestamp, ts1_tstate, ts2_tstate, ts1_temp, ts2_temp, "
+                                 "ts1_t_cool, ts2_t_cool, wu_temp_f, wu_relative_humidity",
+            KeyConditionExpression=Key('tstat_id').eq('DEADBEEF')
+                                   & Key('log_timestamp').gt(str(starttimestamp)),
+            ExclusiveStartKey=response['LastEvaluatedKey']
+        )
+        df = df.append(pd.DataFrame(response['Items']))
+    else:
+        print('got all response pages')
+        hasmorepages = False
+
 
 state_ts2 = df['ts2_tstate'].copy()
 state_ts2[df['ts2_tstate'] == 'Cool'] = 1
@@ -186,9 +205,9 @@ state_ts2_trace = Scatter(
     )
 )
 
+fig.append_trace(wu_temp_f_trace, 1, 1)
 fig.append_trace(ts1_temp_trace, 1, 1)
 fig.append_trace(ts2_temp_trace, 1, 1)
-fig.append_trace(wu_temp_f_trace, 1, 1)
 
 fig.append_trace(state_ts2_trace, 7, 1)
 fig.append_trace(state_ts1_trace, 8, 1)

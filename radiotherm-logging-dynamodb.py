@@ -10,7 +10,9 @@ import json
 # include WU key in URL in file weather_underground_query_url.txt
 # http://api.wunderground.com/api/<your key here>/conditions/q/<weather station here>.json
 with open('weather_underground_query_url.txt', 'r') as f:
-    wu_query_url = f.readline()
+    wu_query_url = f.readline()  # .rstrip('\n')
+print('getting local outside weather from:')
+print(wu_query_url)
 
 # 1st floor
 IP1 = '192.168.0.111'
@@ -62,6 +64,7 @@ while True:
             wu_precip_1hr_in = parsed_json['current_observation']['precip_1hr_in']
             wu_precip_today_in = parsed_json['current_observation']['precip_today_in']
             wu_weather = parsed_json['current_observation']['weather']
+            wu_station_id = parsed_json['current_observation']['station_id']
 
             # downstairs thermostat ts1 readings
             ts1_temp = str(tstat_1.temp['raw'])
@@ -99,7 +102,7 @@ while True:
                       'ts2_hold': ts2_hold,
                       'ts2_tstate': ts2_tstate,
                       'ts2_fstate': ts2_fstate,
-                      'wu_station': 'pws:KTXARGYL24',
+                      'wu_station': wu_station_id,
                       'wu_temp_f': wu_temp_f,
                       'wu_relative_humidity': wu_relative_humidity,
                       'wu_wind_degrees': wu_wind_degrees,
@@ -131,6 +134,8 @@ while True:
 
             time.sleep(300)  # Delay for 5 minutes (300 seconds)
         except Exception as e:
+            print('Exception Occurred')
             print(e)
             print('getting new connection to thermostats')
+            time.sleep(5)
             break
