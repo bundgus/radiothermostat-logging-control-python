@@ -13,7 +13,7 @@ max_samples_under_target = 8
 seconds_in_period = 300  # 5 minutes (600 seconds)
 #########################################
 
-def get_target_temp(tstatnum):
+def get_target_temp(tstat):
     now = datetime.datetime.now()
     #print('getting target temp ', tstatnum, now)
     #print(now.isoweekday())
@@ -33,7 +33,7 @@ while True:
         while True:
             now = datetime.datetime.now(timezone.utc)
 
-            target_temp_1 = get_target_temp(1)
+            target_temp_1 = get_target_temp(tstat1)
             if tstat1.tmode['human'] == 'Cool' and tstat1.t_cool['raw'] < target_temp_1:
                 print(now, 'hvac 1 set to less than 75 for ' + str(periods_under_target_1 * seconds_in_period / 60)
                       + ' minutes')
