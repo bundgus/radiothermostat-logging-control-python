@@ -19,6 +19,7 @@ IP1 = '192.168.0.111'
 # 2ND floor
 IP2 = '192.168.0.112'
 
+
 # Helper class to convert a DynamoDB item to JSON.
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
@@ -32,6 +33,9 @@ class DecimalEncoder(json.JSONEncoder):
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('tstat_log')
+
+last_wu_temp_f = 0.0
+current_wu_temp_f = 0.0
 
 while True:
 
@@ -51,6 +55,11 @@ while True:
             # weather underground outside temp & weather conditions
             wu_r = requests.get(wu_query_url)
             parsed_json = wu_r.json()
+
+            last_wu_temp_f = current_wu_temp_f
+            current_wu_temp_f = parsed_json['current_observation']['temp_f']
+            print(str(now), 'last_wu_temp_f', type(last_wu_temp_f), last_wu_temp_f)
+            print(str(now), 'current_wu_temp_f', type(current_wu_temp_f), current_wu_temp_f)
 
             wu_temp_f = str(parsed_json['current_observation']['temp_f'])
             wu_relative_humidity = parsed_json['current_observation']['relative_humidity']
@@ -127,7 +136,7 @@ while True:
             if ts2_tmode == 'Heat':
                 sample['ts2_t_heat'] = ts2_t_heat
 
-            js = json.dumps(sample)
+            js = json.dumps(sample, cls=DecimalEncoder)
             print(js)
 
             table.put_item(Item=sample)
