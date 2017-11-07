@@ -34,6 +34,7 @@ pe = 'tstat_id, ' \
      'ts1_temp, ' \
      'ts1_tmode, ' \
      'ts1_fmode, ' \
+     'ts1_t_cool, ' \
      'ts1_hold, ' \
      'ts1_tstate, ' \
      'ts1_fstate, ' \
@@ -41,6 +42,7 @@ pe = 'tstat_id, ' \
      'ts2_temp, ' \
      'ts2_tmode, ' \
      'ts2_fmode, ' \
+     'ts1_t_heat, ' \
      'ts2_hold, ' \
      'ts2_tstate, ' \
      'ts2_fstate, ' \
