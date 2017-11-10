@@ -7,7 +7,7 @@ import datetime
 from pytz import timezone
 from datetime import timedelta
 
-hours_of_history = 24 * 90
+hours_of_history = 24 * 180
 
 
 # Helper class to convert a DynamoDB item to JSON.
@@ -35,6 +35,7 @@ pe = 'tstat_id, ' \
      'ts1_tmode, ' \
      'ts1_fmode, ' \
      'ts1_t_cool, ' \
+     'ts1_t_heat, ' \
      'ts1_hold, ' \
      'ts1_tstate, ' \
      'ts1_fstate, ' \
@@ -42,7 +43,8 @@ pe = 'tstat_id, ' \
      'ts2_temp, ' \
      'ts2_tmode, ' \
      'ts2_fmode, ' \
-     'ts1_t_heat, ' \
+     'ts2_t_cool, ' \
+     'ts2_t_heat, ' \
      'ts2_hold, ' \
      'ts2_tstate, ' \
      'ts2_fstate, ' \
@@ -89,4 +91,3 @@ while hasmorepages:
         hasmorepages = False
 
 print(df.to_csv('tstat_log.csv', index=False))
-
