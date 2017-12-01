@@ -32,7 +32,7 @@ table = dynamodb.Table('tstat_log')
 
 response = table.query(
     ProjectionExpression="log_timestamp, ts1_tstate, ts2_tstate, ts1_temp, ts2_temp, "
-                         "ts1_t_cool, ts2_t_cool, wu_temp_f, wu_relative_humidity",
+                         "ts1_t_cool, ts2_t_cool, wu_temp_f, wu_relative_humidity, wu_solarradiation",
     KeyConditionExpression=Key('tstat_id').eq('DEADBEEF')
                            & Key('log_timestamp').gt(str(starttimestamp))
 )
@@ -72,6 +72,8 @@ df['log_timestamp'] = pd.to_datetime(df['log_timestamp'])
 
 df['log_timestamp'] = df['log_timestamp'].dt.tz_localize('UTC') \
     .dt.tz_convert('US/Central').dt.tz_localize(None)
+
+print(df)
 
 # plotting configuration follows:
 

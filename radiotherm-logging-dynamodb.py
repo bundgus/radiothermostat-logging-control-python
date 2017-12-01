@@ -69,6 +69,7 @@ while True:
             wu_dewpoint_f = str(parsed_json['current_observation']['dewpoint_f'])
             wu_windchill_f = parsed_json['current_observation']['windchill_f']
             wu_heat_index_f = parsed_json['current_observation']['heat_index_f']
+            wu_solarradiation = parsed_json['current_observation']['solarradiation']
             wu_UV = parsed_json['current_observation']['UV']
             wu_precip_1hr_in = parsed_json['current_observation']['precip_1hr_in']
             wu_precip_today_in = parsed_json['current_observation']['precip_today_in']
@@ -120,6 +121,7 @@ while True:
                       'wu_dewpoint_f': wu_dewpoint_f,
                       'wu_windchill_f': wu_windchill_f,
                       'wu_heat_index_f': wu_heat_index_f,
+                      'wu_solarradiation': wu_solarradiation,
                       'wu_UV': wu_UV,
                       'wu_precip_1hr_in': wu_precip_1hr_in,
                       'wu_precip_today_in': wu_precip_today_in,
